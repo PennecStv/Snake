@@ -1,3 +1,14 @@
+
+@font-face {
+    font-family: 'minecraft';
+    src: url('/assets/font/Minecraft.ttf') format('truetype'),
+         url('/assets/font/minecraft-font/minecraft-webfont.woff2') format('woff2'),
+         url('/assets/font/minecraft-font/minecraft-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 h1{
     text-align: center;
 }
@@ -24,6 +35,15 @@ canvas {
 
 button {
     margin: 10px;
+    height: 40px;
+    width: 300px;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    font-family: 'minecraft';
+    font-size: large;
+    cursor: pointer;
+    line-height: 26px;
 }
 
 
@@ -82,6 +102,7 @@ button {
 
 .modal-body {
     text-align: center;
+    align-items: center;
     padding: 2px 16px;
     display: flex;
     flex-direction: column; 
