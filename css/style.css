@@ -42,7 +42,7 @@ button {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-#GameOver-Modal {
+#gameOver-Modal {
     display: none;
 }
 

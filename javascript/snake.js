@@ -8,7 +8,7 @@ canvas.width  = 400;
 
 let tileSize = canvas.height / 20;
 
-var level = "medium";
+var level;
 
 //Serpent
 var snake = [];
@@ -18,7 +18,7 @@ var SNAKE = null;
 var food = [];
 var FOOD = null;
 
-var wallList = [];
+let wallList = [];
 var WALL = null;
 
 //Case vide
@@ -29,6 +29,8 @@ var direction;
 
 //Score du joueur
 var score = 0;
+
+var gameOn;
 
 var canChange = true;
 
@@ -98,8 +100,8 @@ function loadLevel(level){
         snake = data.snake;
         food  = data.food;
         wallList = data.walls;
-
-        setInterval(step, data.delay);
+        
+        gameOn = setInterval(step, data.delay);
     })
 
     .catch (function(error){
@@ -113,7 +115,7 @@ function loadLevel(level){
 
 /* === MOTEUR DU JEU === */
 function step(){
-    
+    console.log("tic");
     if (!gameOver){
         buildWorld(worldDimension);
         
@@ -226,9 +228,8 @@ function eatFood(){
     do {
     food[0] = getRandomInt(0, worldDimension[0]);
     food[1] = getRandomInt(0, worldDimension[0]);
-    } while (snake.includes(food[0]) || snake.includes(food[1]) || wallList.includes(food[0]) || wallList.includes(food[1]));
+    } while (contains(snake, food)|| contains(wallList, food));
 
-    console.log("Food:" + food);
     snake.unshift(oldTail);
     drawFood();
 
@@ -296,10 +297,17 @@ function checkCollision(){
     
     
     if (gameOver){
-        snake.pop();
-        snake.unshift(oldTail);
+        stopGame();
         console.log("Out of bound!");
     }
+}
+
+
+function stopGame(){
+    snake.pop();
+    snake.unshift(oldTail);
+    clearInterval(gameOn);
+    gameOverModal.style.display = "block";
 }
 
 
@@ -312,8 +320,25 @@ function getRandomInt(min, max) {
   }
 
 
+  function contains(list, element){
+    let i = 0;
+    isFound = false;
+
+    while (!isFound && i < list.length){
+        if (JSON.stringify(list[i]) === JSON.stringify(element)){
+            isFound = true;
+        }
+        i++;  
+    }
+
+    return isFound;
+  }
+
+
   /* === Main === */
 function main(){
+    gameOver = false;
+    direction = undefined;
     loadLevel(level);
 }
 

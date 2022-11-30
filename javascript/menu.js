@@ -1,37 +1,56 @@
-const modal = document.getElementById("Menu-Modal");
+const menuModal     = document.getElementById("menu-Modal");
 
-const easyButton = document.getElementById("easy");
+const gameOverModal = document.getElementById("gameOver-Modal");
 
-const mediumButton = document.getElementById("medium");
+const easyButton    = document.getElementById("easy");
 
-const hardButton = document.getElementById("hard");
+const mediumButton  = document.getElementById("medium");
+
+const hardButton    = document.getElementById("hard");
 
 const extremeButton = document.getElementById("extreme");
 
+const replayButton  = document.getElementById("replay");
+
+const levelButton   = document.getElementById("change-level");
+
 
 easyButton.addEventListener("click", function(){
-    modal.style.display = "none";
+    menuModal.style.display = "none";
     level = "easy";
     main();
 });
 
 
 mediumButton.addEventListener("click", function(){
-    modal.style.display = "none";
+    menuModal.style.display = "none";
     level = "medium";
     main();
 });
 
 
 hardButton.addEventListener("click", function(){
-    modal.style.display = "none";
+    menuModal.style.display = "none";
     level = "hard";
     main();
 });
 
 
 extremeButton.addEventListener("click", function(){
-    modal.style.display = "none";
+    menuModal.style.display = "none";
     level = "extreme";
     main();
+});
+
+
+replayButton.addEventListener("click", function(){
+    gameOverModal.style.display = "none";
+    main();
+});
+
+
+levelButton.addEventListener("click", function(){
+    gameOverModal.style.display = "none";
+    menuModal.style.display = "block";
+    //clearGame();
 });
