@@ -8,7 +8,6 @@ canvas.width  = 400;
 
 let tileSize = canvas.height / 20;
 
-//URL
 var level = "medium";
 
 //Serpent
@@ -115,17 +114,6 @@ function loadLevel(level){
 /* === MOTEUR DU JEU === */
 function step(){
     
-    /**
-     * 1. Vérifier si l’utilisateur a enfoncé une touche, et modifier la direction du serpent en conséquence (si cela est compatible avec sa direction actuelle).
-     * 2. Calculer la nouvelle position de la tête du serpent en fonction de sa direction.
-     * 3. Vérifier si la tête du serpent rencontre de la nourriture, un mur, ou un morceau de son corps.
-     *  - Dans le premier cas, le score augmente, et une autre nourriture est ajoutée dans une case vide aléatoire.
-     *  - Dans les autres cas, la partie se termine.
-     * 4. Mettre à jour le tableau SNAKE en faisant avancer le serpent ; s’il a mangé de la nourriture, son corps doit s’allonger 
-     *    (ce qui revient à ne pas réduire sa queue). Mettre également à jour le tableau WORLD en conséquence.
-     * 5. Effacer intégralement le canvas, et re-dessiner l’état de WORLD. 
-     *   (On pourrait envisager de ne redessiner que les parties qui ont changé, mais cette méthode est plus simple et plus évolutive).
-     */
     if (!gameOver){
         buildWorld(worldDimension);
         
@@ -238,7 +226,7 @@ function eatFood(){
     do {
     food[0] = getRandomInt(0, worldDimension[0]);
     food[1] = getRandomInt(0, worldDimension[0]);
-    } while (snake.includes(food[0]) || snake.includes(food[1]));
+    } while (snake.includes(food[0]) || snake.includes(food[1]) || wallList.includes(food[0]) || wallList.includes(food[1]));
 
     console.log("Food:" + food);
     snake.unshift(oldTail);
@@ -335,4 +323,4 @@ function main(){
 
 
 /* === MAIN === */
-main();
+//main();
