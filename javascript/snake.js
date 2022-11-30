@@ -6,17 +6,24 @@ var context   = canvas.getContext("2d");
 canvas.height = 400;
 canvas.width  = 400;
 
-let tileCount = 15;
 let tileSize = canvas.height / 20;
 
-//Serpent
-var snake = [[0, 0]];
+//URL
+var level = "medium";
 
-//Case vide
-const EMPTY = "EMPTY";
+//Serpent
+var snake = [];
+var SNAKE = null;
 
 //Nourriture
-var food = [5 * tileSize, 5 * tileSize];
+var food = [];
+var FOOD = null;
+
+var wallList = [];
+var WALL = null;
+
+//Case vide
+const EMPTY = null;
 
 //Direction du serpent
 var direction;
@@ -28,10 +35,8 @@ var canChange = true;
 
 //Plateau de jeu
 var WORLD = [];
-var worldDimension = [20, 20];
 
 var gameOver = false;
-
 
 var oldTail = [];
 
@@ -42,25 +47,25 @@ document.addEventListener('keydown', function(key){
         switch(key.code){
 
             case "ArrowUp":
-                if ((direction === "bas" && snake.length < 2) || (direction !== "bas"))
+                if (direction !== "bas")
                     direction = "haut";
                 break;
 
 
             case "ArrowDown":
-                if ((direction === "haut" && snake.length < 2) || (direction !== "haut"))
+                if (direction !== "haut" && direction !== undefined)
                     direction = "bas";
                 break;
 
 
             case "ArrowLeft":
-                if ((direction === "droite" && snake.length < 2) || (direction !== "droite"))
+                if (direction !== "droite")
                     direction = "gauche";
                 break;
 
 
             case "ArrowRight":
-                if ((direction === "gauche" && snake.length < 2) || (direction !== "gauche"))
+                if (direction !== "gauche")
                     direction = "droite";
                 break;
 
@@ -71,6 +76,37 @@ document.addEventListener('keydown', function(key){
     }
     canChange = false;
 });
+
+
+/* === Récupération des données JSON === */
+function loadLevel(level){
+    
+    jsonFile = "json/" + level + ".json";
+
+    fetch(jsonFile)
+    .then(function(response){
+        if (response.ok){
+            return response.json();
+        } else {
+            throw ("Error" + response.statuts);
+        }
+    })
+
+    .then (function(data) {
+        worldDimension = data.dimensions;
+        tileSize = canvas.height / worldDimension[0];
+
+        snake = data.snake;
+        food  = data.food;
+        wallList = data.walls;
+
+        setInterval(step, data.delay);
+    })
+
+    .catch (function(error){
+        console.log(error);
+    });
+}
 
 
 
@@ -91,8 +127,7 @@ function step(){
      *   (On pourrait envisager de ne redessiner que les parties qui ont changé, mais cette méthode est plus simple et plus évolutive).
      */
     if (!gameOver){
-        buildWorld();
-        drawFood();
+        buildWorld(worldDimension);
         
         canChange = true;
         if (direction !== undefined){
@@ -100,24 +135,28 @@ function step(){
         } else {
             drawSnake();
         }
+
+        drawFood();
     }
 }
 
 
 //Construire le plateau
-function buildWorld(){
+function buildWorld(dimension){
 
-    for (let i = 0; i < worldDimension[0]; i++){
+    for (let i = 0; i < dimension[0]; i++){
         WORLD[i] = [];
     }
 
-    for (let column = 0; column < worldDimension[0]; column++){
+    for (let column = 0; column < dimension[0]; column++){
 
-        for (let row = 0; row < worldDimension[1]; row++){
+        for (let row = 0; row < dimension[1]; row++){
             WORLD[column][row] = EMPTY;
             drawCase(row, column);
         }
     }
+
+    drawWall();
 }
 
 
@@ -136,75 +175,53 @@ function drawSnake(){
     for (let i = 0; i < snake.length; i++){
         let bodyPart = snake[i];
         WORLD[bodyPart[0]][bodyPart[1]] = SNAKE;
-        context.fillRect(bodyPart[0], bodyPart[1], tileSize, tileSize);
+        context.fillRect(bodyPart[0] * tileSize, bodyPart[1] * tileSize, tileSize, tileSize);
     };
 }
 
 function drawFood(){
     context.fillStyle= "red";
     WORLD[food[0]][food[1]] = FOOD;
-    context.fillRect(food[0], food[1], tileSize,tileSize);
+    context.fillRect(food[0] * tileSize, food[1] * tileSize, tileSize, tileSize);
 }
 
 
-function clearScreen(){
-    context.fillStyle= "greenyellow";
-    context.fillRect(0,0,canvas.clientWidth,canvas.clientHeight);
+function drawWall(){
+    context.fillStyle= "brown";
+    for (let i = 0; i < wallList.length; i++){
+        let wall = wallList[i];
+        WORLD[wall[0]][wall[1]] = WALL;
+        context.fillRect(wall[0] * tileSize, wall[1] * tileSize, tileSize, tileSize);
+    };
 }
 
 
 
 /* === Serpent === */
-/*
-function startSnake(){
-    let head = [];
-    let body = snake[0];
-    switch(direction){
-        case "haut":
-            head = [body[0], body[1] - tileSize];
-            break;
-
-        case "bas":
-            head = [body[0], body[1] + tileSize];
-            break;
-
-        case "gauche":
-            head = [body[0] - tileSize, body[1]];
-            break;
-
-        case "droite":
-            head = [body[0] + tileSize, body[1]];
-            break;
-    }
-    snake.push(head);
-}
-*/
-
 function moveSnake(direction){
     let head = snake.slice(-1)[0];
     let newHead = [head[0], head[1]];
 
     switch(direction){
         case "haut":
-            newHead[1] -= tileSize;
+            newHead[1] -= 1;
             break;
 
         case "bas":
-            Math.floor(newHead[1] += tileSize);
+            newHead[1] += 1;
             break;
 
         case "gauche":
-            Math.floor(newHead[0] -= tileSize);
+            newHead[0] -= 1;
             break;
 
         case "droite":
-            Math.floor(newHead[0] += tileSize);
+            newHead[0] += 1;
             break;
     }
     snake.push(newHead);
     oldTail = snake[0];
     snake.shift();
-
     
     checkCollision();
 
@@ -219,8 +236,8 @@ function eatFood(){
     drawCase(food[0], food[1]);
 
     do {
-    food[0] = getRandomInt(0, worldDimension[0]) * tileSize;
-    food[1] = getRandomInt(0, worldDimension[0]) * tileSize;
+    food[0] = getRandomInt(0, worldDimension[0]);
+    food[1] = getRandomInt(0, worldDimension[0]);
     } while (snake.includes(food[0]) || snake.includes(food[1]));
 
     console.log("Food:" + food);
@@ -261,33 +278,37 @@ function checkEat(){
             }
             break;
     }
-    /*
-    if (head[0] === food[0] && head[1] === food[1]){
-        let tail = snake[0];
-        snake.unshift(tail);
-    }
-    */
 }
 
 function checkCollision(){
     let head = snake.slice(-1)[0];
     let body = snake.slice(0, snake.length - 1);
+    console.log("Tete =" + snake);
+    console.log("Body =" + body);
     let i = 0;
     while (!gameOver && i < body.length){
         bodyPart = body[i];
-        gameOver = bodyPart[0] === head[0] && bodyPart[1] === head[1];
+        gameOver = (bodyPart[0] === head[0] && bodyPart[1] === head[1]);
         i++;
     }
 
+    let j = 0;
+    while (!gameOver && j < wallList.length){
+        wall = wallList[j];
+        gameOver = (wall[0] === head[0] && wall[1] === head[1]);
+        j++;
+    }
+
     if (!gameOver){
-        gameOver = (head[0] > (worldDimension[0] - 1) * tileSize 
-                || head[1] > (worldDimension[0] - 1) * tileSize
+        gameOver = (head[0] > (worldDimension[0] - 1) 
+                || head[1] > (worldDimension[0] - 1)
                 || head[0] < 0
                 || head[1] < 0);
     }
     
     
     if (gameOver){
+        snake.pop();
         snake.unshift(oldTail);
         console.log("Out of bound!");
     }
@@ -305,44 +326,12 @@ function getRandomInt(min, max) {
 
   /* === Main === */
 function main(){
-    
-    buildWorld();
-    setInterval(step, 200);
+    loadLevel(level);
 }
 
 
 /* === Canvas === */
 
-
-/*
-var gridH = 500;
-var gridW = 500;
-var dimension = 15;
-var caseDimension = gridH / dimension;
-var p  = 10;
-
-var cw = gridW + (p*2) + 1;
-var ch = gridH + (p*2) + 1;
-
-canvas.height = ch;
-canvas.width = cw;
-
-function drawBoard(){
-    for (var x = 0; x <= gridW; x += caseDimension) {
-        context.moveTo(0.5 + x + p, p);
-        context.lineTo(0.5 + x + p, gridH + p);
-    }
-
-    for (var y = 0; y <= gridH; y += caseDimension) {
-        context.moveTo(p, 0.5 + y + p);
-        context.lineTo(gridW + p, 0.5 + y + p);
-    }
-    context.strokeStyle = "black";
-    context.stroke();
-}
-
-drawBoard();
-*/
 
 
 /* === MAIN === */

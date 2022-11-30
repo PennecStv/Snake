@@ -2,7 +2,7 @@
     "dimensions": [15, 15],
 
 
-    "delay": [750],
+    "delay": 200,
 
 
     "walls": [],
