@@ -1,26 +1,61 @@
 
 @font-face {
     font-family: 'minecraft';
-    src: url('/assets/font/Minecraft.ttf') format('truetype'),
-         url('/assets/font/minecraft-font/minecraft-webfont.woff2') format('woff2'),
-         url('/assets/font/minecraft-font/minecraft-webfont.woff') format('woff');
+    src: url('/assets/font/silkScreen-font/slkscr-webfont.woff2') format('woff2'),
+         url('/assets/font/silkScreen-font/slkscr-webfont.woff') format('woff'),
+         url('/assets/font/Minecraft.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'title';
+    src: url('/assets/font/title-font/botsmaticdemo-mxor-webfont.woff2') format('woff2'),
+         url('/assets/font/title-font/botsmaticdemo-mxor-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html{
+    min-height: 100%;
+    margin: 0;
+    overflow: hidden;
 }
 
 
 h1{
     text-align: center;
+    font-family: 'title';
+    font-size: 50px;
+}
+
+h2{
+    text-align: center;
+    font-family: 'minecraft';
+    font-size: 40px;
+}
+
+header{
+    background-color: lightskyblue;
+    width: 100%;
 }
 
 body {
     justify-content: center;
     align-items: center;
     margin: 0;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-
+    box-sizing: border-box;
 }
+
+section{
+    background-image: url("/assets/img/minecraft-far-dirt-wallpaper.jpg");
+    height: 100%;
+    width: 100%;
+}
+
 
 #plateau {
     margin-top: 5vh;
@@ -28,25 +63,29 @@ body {
 }
 
 canvas {
-    background-color: greenyellow;
+    background-image: url("/assets/img/grass-texture-1.jpg");
     margin: 20px;
     box-shadow: black 20px 10px 50px;
 }
 
 button {
     margin: 10px;
+    padding-top: 6px;
     height: 40px;
-    width: 300px;
+    width: 405px;
     text-decoration: none;
     text-align: center;
-    color: black;
+    color: whitesmoke;
     font-family: 'minecraft';
     font-size: large;
     cursor: pointer;
+    background-image: url("/assets/img/btn1.png");
     line-height: 26px;
 }
 
-
+button:hover{
+    background-image: url("/assets/img/btn2.png");
+}
 
 /* === Modal: Menu du jeu === */
 .modal {
@@ -94,7 +133,7 @@ button {
 
 
 .modal-header {
-    padding: 40px 16px;
+    padding: 20px 16px;
     background-color: green;
     color: whitesmoke;
     text-align: center;

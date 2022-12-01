@@ -3,8 +3,8 @@
 //Canvas
 var canvas    = document.querySelector("canvas");
 var context   = canvas.getContext("2d");
-canvas.height = 400;
-canvas.width  = 400;
+canvas.height = 500;
+canvas.width  = 500;
 
 let tileSize = canvas.height / 20;
 
@@ -41,7 +41,33 @@ var gameOver = false;
 
 var oldTail = [];
 
-/* == Listener == */
+
+/* === Images === */
+const imgBlock1 = new Image();
+imgBlock1.src = './assets/img/grass-texture-1.jpg';
+
+const imgBlock2 = new Image();
+imgBlock2.src = './assets/img/grass-texture-2.jpg';
+
+const imgBricks =  new Image();
+imgBricks.src = './assets/img/bricks-texture.png';
+
+const imgApple = new Image();
+imgApple.src = './assets/img/apple.png';
+
+const imgSnakeHead = new Image();
+
+const imgSnakeBody = new Image();
+
+
+const music = new Audio();
+
+const pickupSound = new Audio();
+
+const eatSound = new Audio();
+
+
+/* === Listener === */
 document.addEventListener('keydown', function(key){
     
     if (canChange){
@@ -142,7 +168,12 @@ function buildWorld(dimension){
 
         for (let row = 0; row < dimension[1]; row++){
             WORLD[column][row] = EMPTY;
-            drawCase(row, column);
+            if (row%2 === 0 && column%2 === 1 || row%2 === 1 && column%2 == 0){
+                drawCase(imgBlock1, row, column);
+            } else {
+                drawCase(imgBlock1, row, column);
+            }
+                
         }
     }
 
@@ -151,12 +182,10 @@ function buildWorld(dimension){
 
 
 /* === Drawer === */
-function drawCase(x, y){
-    context.fillStyle   = "greenyellow";
-    context.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-
-    context.fillStyle = "black";
-    context.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+function drawCase(image, x, y){
+    //context.fillStyle   = "greenyellow";
+    //context.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+    context.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
 }
 
 
@@ -172,7 +201,7 @@ function drawSnake(){
 function drawFood(){
     context.fillStyle= "red";
     WORLD[food[0]][food[1]] = FOOD;
-    context.fillRect(food[0] * tileSize, food[1] * tileSize, tileSize, tileSize);
+    context.drawImage(imgApple, food[0] * tileSize, food[1] * tileSize, tileSize, tileSize);
 }
 
 
@@ -181,7 +210,8 @@ function drawWall(){
     for (let i = 0; i < wallList.length; i++){
         let wall = wallList[i];
         WORLD[wall[0]][wall[1]] = WALL;
-        context.fillRect(wall[0] * tileSize, wall[1] * tileSize, tileSize, tileSize);
+        context.drawImage(imgBricks, wall[0] * tileSize, wall[1] * tileSize, tileSize, tileSize);
+        //context.fillRect(wall[0] * tileSize, wall[1] * tileSize, tileSize, tileSize);
     };
 }
 
@@ -223,7 +253,12 @@ function moveSnake(direction){
 
 
 function eatFood(){
-    drawCase(food[0], food[1]);
+    if (food[0]%2 === 0 && food[1]%2 === 1 || food[0]%2 === 1 && food[1]%2 == 0){
+        drawCase(imgBlock1, food[0], food[1]);
+    } else {
+        drawCase(imgBlock2, food[0], food[1]);
+    }
+
 
     do {
     food[0] = getRandomInt(0, worldDimension[0]);
