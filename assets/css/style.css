@@ -1,0 +1,179 @@
+/* === Polices personnalisées === */
+@font-face {
+    font-family: 'minecraft';
+    src: url('/assets/font/silkScreen-font/slkscr-webfont.woff2') format('woff2'),
+         url('/assets/font/silkScreen-font/slkscr-webfont.woff') format('woff'),
+         url('/assets/font/Minecraft.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'title';
+    src: url('/assets/font/title-font/botsmaticdemo-mxor-webfont.woff2') format('woff2'),
+         url('/assets/font/title-font/botsmaticdemo-mxor-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* === Page principale === */
+html{
+    min-height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+h1{
+    text-align: center;
+    font-family: 'title';
+    font-size: 50px;
+}
+
+h2{
+    text-align: center;
+    font-family: 'minecraft';
+    color: whitesmoke;
+    font-size: 40px;
+}
+
+#highScore{
+    text-align: center;
+    font-family: 'minecraft';
+    color: whitesmoke;
+    font-size: 1.3vw;
+}
+
+header{
+    background-image: url("/assets/img/grass-texture-2.jpg");
+    width: 100%;
+}
+
+body {
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+
+#scoreField1{
+    text-align: center;
+    margin-top: 20px;
+    height: 20px;
+    font-family: "minecraft";
+    color: whitesmoke;
+    font-size: 30px;
+}
+
+
+section{
+    background: url("/assets/img/minecraft-far-dirt-wallpaper.jpg"), rgba(0,0,0,0.2);
+    background-blend-mode: overlay;
+    background-repeat: repeat-x;
+    height: 100%;
+    width: 100%;
+}
+
+hr{
+    width: 80%;
+    color: whitesmoke;
+}
+
+
+#plateau {
+    text-align: center;
+}
+
+canvas {
+    background-image: url("/assets/img/grass-texture-1.jpg");
+    margin: 20px;
+    border: 5px solid gray;
+    box-shadow: black 10px 10px 20px;
+}
+
+button {
+    margin: 8px;
+    padding-top: 4px;
+    height: 2em;
+    width: 90%;
+    text-decoration: none;
+    text-align: center;
+    color: whitesmoke;
+    font-family: 'minecraft';
+    font-size: 1.3vw;
+    cursor: pointer;
+    background-image: url("/assets/img/btn1.png");
+}
+
+button:hover{
+    background-image: url("/assets/img/btn2.png");
+}
+
+
+
+/* === Modal: écrans secondaires === */
+
+.modal {
+    position: fixed;
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+/* Modal de fin de partie non affiché */
+#gameOver-Modal {
+    display: none;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: rgba(0,0,0, 0.5);
+    margin: auto;
+    padding: 0;
+    border: 5px double #888;
+    width: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+  
+/* Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+  
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+
+.modal-header {
+    padding: 20px 16px;
+    background-image: url("/assets/img/grass-texture-1.jpg");
+    color: whitesmoke;
+    text-align: center;
+}
+
+.modal-body {
+    text-align: center;
+    align-items: center;
+    padding: 2px 16px;
+    display: flex;
+    flex-direction: column;
+}
