@@ -36,6 +36,7 @@ h2{
     font-family: 'minecraft';
     color: whitesmoke;
     font-size: 40px;
+    margin: 0;
 }
 
 #highScore{

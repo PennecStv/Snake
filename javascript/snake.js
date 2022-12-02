@@ -16,6 +16,7 @@ var level;
 //Serpent
 var snake = [];
 const SNAKE = "SNAKE";
+var oldTail = [];
 
 //Nourriture
 const food = {pos: [],
@@ -38,16 +39,14 @@ var score = 0;
 //Jeu en cours (booléen)
 var gameOn;
 
-//Booléen pour savoir si la direction peut changer
-var canChange = true;
-
-
-
+//Jeu fini
 var gameOver = false;
 
-var oldTail = [];
-
+//Booléen de victoire
 var victory;
+
+//Booléen pour savoir si la direction peut changer
+var canChange = true;
 
 
 /* === Listener === */
@@ -61,25 +60,21 @@ document.addEventListener('keydown', function(key){
                     direction = "haut";
                 break;
 
-
             case "ArrowDown":
                 if (direction !== "haut" && direction !== undefined)
                     direction = "bas";
                 break;
-
 
             case "ArrowLeft":
                 if (direction !== "droite")
                     direction = "gauche";
                 break;
 
-
             case "ArrowRight":
                 if (direction !== "gauche")
                     direction = "droite";
                     
                 break;
-
 
             default:
                 break;
@@ -164,12 +159,12 @@ function buildWorld(dimension){
                 
         }
     }
-
     drawWall();
 }
 
 
 /* === Drawer === */
+
 /**
  * Dessine une case
  * @param {*} image 
@@ -177,12 +172,12 @@ function buildWorld(dimension){
  * @param {*} y 
  */
 function drawCase(image, x, y){
-    //context.fillStyle   = "greenyellow";
-    //context.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
     context.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
 }
 
-
+/**
+ * Dessine le serpent
+ */
 function drawSnake(){
     context.fillStyle   = "green";
     for (let i = 0; i < snake.length; i++){
@@ -196,7 +191,13 @@ function drawSnake(){
     };
 }
 
-
+/**
+ * Dessine la tête du serpent
+ * @param {*} x 
+ * @param {*} y 
+ * @param {*} w 
+ * @param {*} h 
+ */
 function drawHead(x, y, w, h){
     switch(direction){
         case "haut":
@@ -222,6 +223,9 @@ function drawHead(x, y, w, h){
 }
 
 
+/**
+ * dessine la nourriture
+ */
 function drawFood(){
     let imageFood;
     if (food.foodType === "goldenApple"){
@@ -234,7 +238,9 @@ function drawFood(){
     context.drawImage(imageFood, food.pos[0] * tileSize, food.pos[1] * tileSize, tileSize, tileSize);
 }
 
-
+/**
+ * dessine les murs
+ */
 function drawWall(){
     for (let i = 0; i < wallList.length; i++){
         let wall = wallList[i];
@@ -246,7 +252,12 @@ function drawWall(){
 
 
 
-/* === Serpent === */
+/* === Serpent: action === */
+
+/**
+ * Fait déplacer le serpent selon la direction donnée
+ * @param {*} direction 
+ */
 function moveSnake(direction){
     let head = snake.slice(-1)[0];
     let newHead = [head[0], head[1]];
@@ -272,7 +283,7 @@ function moveSnake(direction){
     oldTail = snake[0];
     snake.shift();
 
-    
+    //Vérification des effets de la nouvelle position
     checkEat();
     
     checkCollision();
@@ -283,6 +294,9 @@ function moveSnake(direction){
 }
 
 
+/**
+ * Incrémente le score
+ */
 function addScore(){
     if (food.foodType === "goldenApple"){
         score += 50;
@@ -292,6 +306,9 @@ function addScore(){
 }
 
 
+/**
+ * Fait manger au serpent de la nourriture
+ */
 function eatFood(){
     addScore();
     eatSound.play();
@@ -303,30 +320,28 @@ function eatFood(){
         drawCase(imgBlock2, food.pos[0], food.pos[1]);
     }
 
+    //Cherche des coordonnées valable à la nouvelle nourriture
     do {
         food.pos[0] = getRandomInt(0, worldDimension[0]);
         food.pos[1] = getRandomInt(0, worldDimension[0]);
 
-        console.log(snake.length);
-        console.log(snake.length - 1 === worldDimension[0] * worldDimension[1] - wallList.length);
+        //Si le joueur a gagné, on a pas besoin de chercher de nouvelle coordonnée
         if (snake.length + 1 === worldDimension[0] * worldDimension[1] - wallList.length){
-            console.log("Breaking");
             break;
         }
     } while (contains(snake, food.pos)|| contains(wallList, food.pos)
                     || (oldTail[0] === food.pos[0] && oldTail[1] === food.pos[1]));
 
-    console.log("Food: " + food.pos);
-    console.log("Tail: " + oldTail)
-    console.log(oldTail[0] === food.pos[0] && oldTail[1] === food.pos[1]);
+    //Pour donner un effet de croissance
     snake.unshift(oldTail);
+
+    //Choisis entre pomme en or ou normal
     if (getRandomInt(0, 5) === 4){
         food.foodType = "goldenApple";
     } else {
         food.foodType = "Apple";
     }
     
-
     drawFood();
 }
 
@@ -334,41 +349,25 @@ function eatFood(){
 
 
 /* === Checker === */
+
+/**
+ * Vérifier si la tête du serpent se situe sur de la nourriture
+ */
 function checkEat(){
     let head = snake.slice(-1)[0];
-    console.log(head);
-    switch(direction){
-        case "haut":
-            if (head[0] === food.pos[0] && head[1] === food.pos[1]){
-                eatFood();
-            }
-            break;
-
-        case "bas":
-            if (head[0] === food.pos[0] && head[1] === food.pos[1]){
-                eatFood();
-            }
-            break;
-
-        case "gauche":
-            if (head[0] === food.pos[0] && head[1] === food.pos[1]){
-                eatFood();
-            }
-            break;
-
-        case "droite":
-            if (head[0] === food.pos[0] && head[1] === food.pos[1]){
-                eatFood();
-            }
-            break;
+    if (head[0] === food.pos[0] && head[1] === food.pos[1]){
+        eatFood();
     }
 }
 
+
+/**
+ * Vérifier si la tête du serpent se situe sur un mur ou les bords du plateau
+ */
 function checkCollision(){
     let head = snake.slice(-1)[0];
     let body = snake.slice(0, snake.length - 1);
-    console.log("Tete =" + snake);
-    console.log("Body =" + body);
+
     let i = 0;
     while (!gameOver && i < body.length){
         bodyPart = body[i];
@@ -394,11 +393,13 @@ function checkCollision(){
     if (gameOver){
         collisionSound.play();
         stopGame();
-        console.log("Out of bound!");
     }
 }
 
 
+/**
+ * Vérifier si le joueur a gagné
+ */
 function checkVictory(){
     victory = true;
     let i = 0;
@@ -406,6 +407,7 @@ function checkVictory(){
         j = 0;
 
         while (j < WORLD[i].length && victory){
+            //La bouche s'arrête si on trouve une case vide ou de la nourriture; le joueur n'a pas encore gagné
             if (WORLD[i][j] === EMPTY || WORLD[i][j] === FOOD)
                 victory = false;
             j++;
@@ -414,19 +416,24 @@ function checkVictory(){
         i++;
     }
     
-    
-
-    if (victory){
+    if (victory){ //On arrête le jeu si victoire
         stopGame();
     }
     
 }
 
 
+/* === Jeu === */
+
+/**
+ * Arrête le jeu
+ */
 function stopGame(){
     snake.pop();
     snake.unshift(oldTail);
     clearInterval(gameOn);
+
+    //Configuration du score
     scoreField2.textContent = "Score: "+ score;
     console.log(stockage);
     if (score > stockage.getItem("Score") || stockage.getItem("Score") === null){
@@ -434,6 +441,7 @@ function stopGame(){
         highscore.textContent = "Meilleur score : " + stockage.getItem("Score");
     };
 
+    //Affichage de message en fin de partie
     if (victory){
         titre.textContent = "victoire !";
         message.textContent = "Miam...";
@@ -442,9 +450,15 @@ function stopGame(){
         message.textContent = "fin de la partie";
     }
 
+    //Affichage de l'écran de fin de jeu
     gameOverModal.style.display = "block";
 }
 
+
+/**
+ * Fait jouer une musique aléatoire à partir d'une playlist
+ * @returns le morceau de musique joué
+ */
 function playMusic(){        
     music = playlist[getRandomInt(0, playlist.length)];
     music.loop = false;
@@ -457,6 +471,12 @@ function playMusic(){
 
 
 /* === Utilitaire === */
+/**
+ * Permet d'avoir un entier aléatoire selon un intervale défini.
+ * @param {*} min 
+ * @param {*} max 
+ * @returns 
+ */
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -464,7 +484,13 @@ function getRandomInt(min, max) {
   }
 
 
-  function contains(list, element){
+  /**
+   * Permet de savoir si un tableau se trouve dans un tableau
+   * @param {*} list 
+   * @param {*} element 
+   * @returns 
+   */
+function contains(list, element){
     let i = 0;
     isFound = false;
 
@@ -479,7 +505,8 @@ function getRandomInt(min, max) {
   }
 
 
-  /* === Main === */
+
+/* === Main === */
 function main(){
     gameOver = false;
     direction = undefined;
@@ -487,12 +514,3 @@ function main(){
     score = 0;
     loadLevel(level);
 }
-
-
-/* === Canvas === */
-
-
-
-/* === MAIN === */
-//main();
-//
