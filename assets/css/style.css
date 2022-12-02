@@ -1,4 +1,4 @@
-
+/* === Polices personnalisées === */
 @font-face {
     font-family: 'minecraft';
     src: url('/assets/font/silkScreen-font/slkscr-webfont.woff2') format('woff2'),
@@ -16,6 +16,8 @@
     font-style: normal;
 }
 
+
+/* === Page principale === */
 html{
     min-height: 100%;
     margin: 0;
@@ -32,11 +34,19 @@ h1{
 h2{
     text-align: center;
     font-family: 'minecraft';
+    color: whitesmoke;
     font-size: 40px;
 }
 
+#highScore{
+    text-align: center;
+    font-family: 'minecraft';
+    color: whitesmoke;
+    font-size: 1.3vw;
+}
+
 header{
-    background-color: lightskyblue;
+    background-image: url("/assets/img/grass-texture-2.jpg");
     width: 100%;
 }
 
@@ -50,57 +60,78 @@ body {
     box-sizing: border-box;
 }
 
+
+#scoreField1{
+    text-align: center;
+    margin-top: 20px;
+    height: 20px;
+    font-family: "minecraft";
+    color: whitesmoke;
+    font-size: 30px;
+}
+
+
 section{
-    background-image: url("/assets/img/minecraft-far-dirt-wallpaper.jpg");
+    background: url("/assets/img/minecraft-far-dirt-wallpaper.jpg"), rgba(0,0,0,0.2);
+    background-blend-mode: overlay;
+    background-repeat: repeat-x;
     height: 100%;
     width: 100%;
 }
 
+hr{
+    width: 80%;
+    color: whitesmoke;
+}
+
 
 #plateau {
-    margin-top: 5vh;
     text-align: center;
 }
 
 canvas {
     background-image: url("/assets/img/grass-texture-1.jpg");
     margin: 20px;
-    box-shadow: black 20px 10px 50px;
+    border: 5px solid gray;
+    box-shadow: black 10px 10px 20px;
 }
 
 button {
-    margin: 10px;
-    padding-top: 6px;
-    height: 40px;
-    width: 405px;
+    margin: 8px;
+    padding-top: 4px;
+    height: 2em;
+    width: 90%;
     text-decoration: none;
     text-align: center;
     color: whitesmoke;
     font-family: 'minecraft';
-    font-size: large;
+    font-size: 1.3vw;
     cursor: pointer;
     background-image: url("/assets/img/btn1.png");
-    line-height: 26px;
 }
 
 button:hover{
     background-image: url("/assets/img/btn2.png");
 }
 
-/* === Modal: Menu du jeu === */
+
+
+/* === Modal: écrans secondaires === */
+
 .modal {
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    position: fixed;
+    z-index: 1; 
+    padding-top: 100px; 
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
 }
 
+/* Modal de fin de partie non affiché */
 #gameOver-Modal {
     display: none;
 }
@@ -108,10 +139,10 @@ button:hover{
 /* Modal Content */
 .modal-content {
     position: relative;
-    background-color: #fefefe;
+    background-color: rgba(0,0,0, 0.5);
     margin: auto;
     padding: 0;
-    border: 1px solid #888;
+    border: 5px double #888;
     width: 30%;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
@@ -134,7 +165,7 @@ button:hover{
 
 .modal-header {
     padding: 20px 16px;
-    background-color: green;
+    background-image: url("/assets/img/grass-texture-1.jpg");
     color: whitesmoke;
     text-align: center;
 }
@@ -144,5 +175,5 @@ button:hover{
     align-items: center;
     padding: 2px 16px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }

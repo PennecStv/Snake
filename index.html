@@ -6,7 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-        <title>SnakeMan</title>
+
+        <link rel="icon" href="assets/img/apple.png">
+        <title>JSnake</title>
     </head>
 
 <body>
@@ -16,19 +18,26 @@
             </h1>
     </header>
 
+    <!-- Main -->
     <section>
+        <div id = "scoreField1"></div>
+
+        <!-- Canvas -->
         <div id = "plateau">
             <canvas id="SnakeCanvas"></canvas>
         </div>
 
-
+        <!-- Ecran de menu -->
         <div id="menu-Modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1>snake</h1>
+                    <h1>menu</h1>
                 </div>
 
                 <div class="modal-body">
+                    <div id = "highScore">Meilleur score :</div>
+                    <hr>
+
                     <h2>Niveaux:</h2>
 
                     <button id="easy">Facile</button>
@@ -38,6 +47,9 @@
                     <button id="hard">Difficile</button>
 
                     <button id="extreme">Extreme</button>
+
+                    <hr>
+                    <button id = "music">Musique: Off</button>
                 </div>
 
                 <div class="modal-footer">
@@ -45,28 +57,26 @@
             </div>
         </div>
 
-
+        <!-- Ecran de fin de partie -->
         <div id="gameOver-Modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1>snake</h1>
+                    <h1 id = "titre"></h1>
                 </div>
 
                 <div class="modal-body">
-                    <h2>Fin de la partie</h2>
-
+                    <h2 id="message"></h2>
+                    <hr>
+                    <h2 id="scoreField2"></h2>
                     <button id="replay">Rejouer</button>
                 
                     <button id="change-level">Changer de niveau</button>
-
-                </div>
-
-                <div class="modal-footer">
                 </div>
             </div>
         </div>
     </section>
 
+    <script src="javascript/assets.js"></script>
     <script src="javascript/snake.js"></script>
     <script src="javascript/menu.js"></script>
 </body>
